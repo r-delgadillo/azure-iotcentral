@@ -1,0 +1,46 @@
+{
+  "name": "iotcentral",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf ./dist",
+    "format": "prettier --write --loglevel warn \"**/*.{js,json,md,ts,yml,yaml}\"",
+    "format:verify": "prettier --check \"**/*.{js,json,md,ts,yml,yaml}\"",
+    "lint": "tslint --project tsconfig.json --fix",
+    "lint:verify": "tslint --project tsconfig.json",
+    "prebuild": "npm run lint && npm run format",
+    "prebuild:verify": "npm run lint:verify && npm run format:verify",
+    "start": "npm run build && node dist/start.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/r-delgadillo/IoTCentral.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/r-delgadillo/IoTCentral/issues"
+  },
+  "homepage": "https://github.com/r-delgadillo/IoTCentral#readme",
+  "dependencies": {
+    "@azure/arm-iotcentral": "^3.0.0",
+    "@azure/ms-rest-azure-env": "^2.0.0",
+    "@azure/ms-rest-nodeauth": "^3.0.5",
+    "adal-node": "^0.2.1",
+    "http": "0.0.1-security",
+    "install": "^0.13.0",
+    "npm": "^6.14.5",
+    "prettier": "^2.0.5",
+    "request": "^2.88.2",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.5",
+    "uuid": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/request": "^2.48.5",
+    "@types/uuid": "^8.0.0"
+  }
+}

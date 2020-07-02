@@ -1,0 +1,13 @@
+endOfLine: lf
+proseWrap: always
+singleQuote: true
+tabWidth: 4
+trailingComma: es5
+overrides:
+  - files:
+      - '*.yml'
+      - '*.yaml'
+      - 'package.json'
+      - 'package-lock.json'
+    options:
+      tabWidth: 2
