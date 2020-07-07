@@ -1,18 +1,19 @@
 import { IotCentralClient } from '@azure/arm-iotcentral';
+import * as msRest from '@azure/ms-rest-js';
 
+import { Authentication } from '../';
 import * as Context from '../../core/context';
-import * as Authentication from '../authentication';
 
 let iotcClient: IotCentralClient;
-
 export async function getClient(): Promise<IotCentralClient> {
     if (iotcClient) {
         return iotcClient;
     }
-
-    const creds = await Authentication.getCreds(
-        Authentication.TokenAudience.azureManagement
+    const token = await Authentication.getAccessToken(
+        Authentication.Resource.azureManagement
     );
-    iotcClient = new IotCentralClient(creds, Context.subscriptionId);
+    const temp = new msRest.TokenCredentials(token.accessToken, token.type);
+
+    iotcClient = new IotCentralClient(temp, Context.subscriptionId);
     return iotcClient;
 }

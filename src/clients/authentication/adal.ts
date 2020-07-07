@@ -3,16 +3,26 @@ import * as adal from 'adal-node';
 const { promisify } = require('util');
 export class Adal {
     public ac: adal.AuthenticationContext;
-    public tokenCache = new adal.MemoryCache();
-
+    public tokenCache: adal.MemoryCache;
+    public tenantId: string;
     public acquireUserCode: any;
     public acquireTokenWithClientCredentials: any;
 
     public acquireTokenWithDeviceCode: any;
     public acquireTokenWithRefreshToken: any;
-
+    public getCreds: any;
+    public addCreds: any;
     constructor(tenantId: string) {
+        this.tenantId = tenantId;
         const authority = `https://login.microsoftonline.com/${tenantId}/`;
+        this.tokenCache = new adal.MemoryCache();
+        this.getCreds = promisify(
+            this.tokenCache.find.bind(this.tokenCache)
+        ) as (query: any) => Promise<adal.TokenResponse[]>;
+        this.addCreds = promisify(
+            this.tokenCache.add.bind(this.tokenCache)
+        ) as (token: adal.TokenResponse[]) => Promise<void>;
+
         this.ac = new adal.AuthenticationContext(
             authority,
             true,

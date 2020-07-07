@@ -1,5 +1,5 @@
 import * as context from '../../core/context';
-import * as Auth from './testAuth';
+import * as Auth from './authentication';
 
 export async function signIn() {
     const adal = Auth.getClient(context.tenantId);

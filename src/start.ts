@@ -1,8 +1,8 @@
-import * as Authentication from './clients/authentication';
+import { Authentication } from './clients';
 import * as Scripts from './scripts/iotcentral';
 
 async function main() {
-    await Authentication.signIn(Authentication.SignInTypes.ServicePrincipal);
+    await Authentication.login(Authentication.SignInTypes.Interactive);
     await Scripts.execute();
 }
 

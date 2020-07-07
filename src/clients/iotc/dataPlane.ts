@@ -1,5 +1,5 @@
+import { Authentication } from '../';
 import * as Context from '../../core/context';
-import * as Auth from '../authentication';
 import * as HttpClient from '../http';
 
 let url = `https://${Context.subdomain}.${Context.envDomain}.com/api/preview`;
@@ -8,7 +8,9 @@ export async function sendRequest<T>(
     options: { method: string; body?: any },
     subdomain?: string
 ): Promise<HttpClient.RequestResponse<T>> {
-    const token = await Auth.getAccessToken(Auth.TokenAudience.iotCentral);
+    const token = await Authentication.getAccessToken(
+        Authentication.Resource.iotCentral
+    );
 
     const result = (await HttpClient.sendRequest(`${url}${path}`, {
         method: options.method,

@@ -16,13 +16,13 @@ const pricingTier = 'ST1';
 const location = 'United States';
 // const users: Actions.Users.AddUser[] = [
 const users: any[] = [
-    {
-        id: 'rodelga',
-        email: 'rodelga@microsoft.com',
-        type: 'EmailUser',
-        // roles: [{ role: 'ca310b8d-2f4a-44e0-a36e-957c202cd8d4' }],
-        roles: ['ca310b8d-2f4a-44e0-a36e-957c202cd8d4'],
-    },
+    // {
+    //     id: 'rodelga0',
+    //     email: 'rodelga@microsoft.com',
+    //     type: 'EmailUser',
+    //     roles: [{ role: 'ca310b8d-2f4a-44e0-a36e-957c202cd8d4' }],
+    //     // roles: ['ca310b8d-2f4a-44e0-a36e-957c202cd8d4'],
+    // },
 ];
 
 export async function execute() {
@@ -43,8 +43,9 @@ export async function execute() {
     IoTCentral.DataPlane.setTargetApp(subdomain);
 
     // Add users
-    await Actions.Users.addUsersBatch(users);
-
+    if (false) {
+        await Actions.Users.addUsersBatch(users);
+    }
     // Create a device template
     const deviceTemplate = await Actions.DeviceTemplates.add(
         'rodelgaDmId0',
