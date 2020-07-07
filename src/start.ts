@@ -2,7 +2,7 @@ import { Authentication } from './clients';
 import * as Scripts from './scripts/iotcentral';
 
 async function main() {
-    await Authentication.login(Authentication.SignInTypes.Interactive);
+    await Authentication.login();
     await Scripts.execute();
 }
 

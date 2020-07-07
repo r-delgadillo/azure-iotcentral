@@ -1,9 +1,5 @@
 import * as adal from 'adal-node';
 
-import { Environment } from '@azure/ms-rest-azure-env';
-import * as msRestNodeAuth from '@azure/ms-rest-nodeauth';
-
-// import * as context from '../../core/context';
 import { Adal } from './adal';
 import * as Interactive from './interactive';
 import * as ServicePrincipal from './servicePrincipal';
@@ -26,7 +22,9 @@ export function getClient(tenant: string = 'common'): Adal {
     return authContext;
 }
 
-export async function login(type: SignInTypes): Promise<void> {
+export async function login(
+    type: SignInTypes = SignInTypes.Interactive
+): Promise<void> {
     switch (type) {
         case SignInTypes.ServicePrincipal:
             await ServicePrincipal.signIn();
@@ -37,40 +35,21 @@ export async function login(type: SignInTypes): Promise<void> {
     }
 }
 
-export async function getCredentials(
+export async function getToken(
     resource: Resource
 ): Promise<adal.TokenResponse> {
     const client = await getClient();
-    const result = await client.getCreds({ resource });
-    return result[0];
+    const tokens = await client.getCreds({ resource });
+
+    return tokens[0];
 }
 
 export async function getAccessToken(
     resource: Resource
 ): Promise<{ type: string; accessToken: string }> {
-    const client = await getClient();
-    const result = await client.getCreds({ resource });
-    const creds = result[0];
-    console.log(creds);
+    const token = await getToken(resource);
     return {
-        type: creds.tokenType,
-        accessToken: creds.accessToken,
+        type: token.tokenType,
+        accessToken: token.accessToken,
     };
-}
-
-export async function getArmObject(resource: Resource) {
-    const client = await getClient();
-    const clientId = '04b07795-8ddb-461a-bbee-02f9e1bf7b46';
-    console.log(client.tenantId);
-    // const creds = await getCredentials(resource);
-    return new msRestNodeAuth.DeviceTokenCredentials(
-        // clientId,
-        clientId,
-        client.tenantId,
-        // creds.userId,
-        undefined,
-        resource,
-        Environment.AzureCloud,
-        client.tokenCache
-    );
 }

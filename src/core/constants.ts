@@ -1,3 +1,5 @@
+export const iotcClientId = '04b07795-8ddb-461a-bbee-02f9e1bf7b46';
+
 /**
  * List of non-public Azure environments.
  */
