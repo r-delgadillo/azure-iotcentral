@@ -1,30 +1,16 @@
 export const iotcClientId = '04b07795-8ddb-461a-bbee-02f9e1bf7b46';
-
-/**
- * List of non-public Azure environments.
- */
-export const AzureEnvironments = {
-    dogfood: {
-        name: 'AzureDogfood',
-        portalUrl: 'https://windows.azure-test.net/',
-        publishingProfileUrl:
-            'https://windows.azure-test.net/publishsettings/index',
-        managementEndpointUrl:
-            'https://management-preview.core.windows-int.net/',
-        resourceManagerEndpointUrl:
-            'https://api-dogfood.resources.windows-int.net/',
-        sqlManagementEndpointUrl: 'https://management.core.windows.net:8443/',
-        sqlServerHostnameSuffix: '.database.windows.net',
-        galleryEndpointUrl: 'https://df.gallery.azure-test.net/',
-        activeDirectoryEndpointUrl: 'https://login.windows-ppe.net/',
-        activeDirectoryResourceId: 'https://management.core.windows.net/',
-        activeDirectoryGraphResourceId: 'https://graph.ppe.windows.net/',
-        activeDirectoryGraphApiVersion: '2013-04-05',
-        storageEndpointSuffix: '.core.windows.net',
-        keyVaultDnsSuffix: '.vault.azure.net',
-        azureDataLakeStoreFileSystemEndpointSuffix: 'azuredatalakestore.net',
-        azureDataLakeAnalyticsCatalogAndJobEndpointSuffix:
-            'azuredatalakeanalytics.net',
-        validateAuthority: true,
-    },
-};
+export const enum PricingTier {
+    ST1 = 'ST1',
+    ST2 = 'ST2',
+}
+export const enum AppTemplates {
+    pnp = 'iotc-pnp-preview',
+}
+export const enum IotCentralLocations {
+    unitedStates = 'United States',
+    europe = 'Europe',
+    asiaPacific = 'Asia Pacific',
+    australia = 'Australia',
+    unitedKingdom = 'UK',
+    japan = 'Japan',
+}

@@ -5,13 +5,21 @@ export class Adal {
     public ac: adal.AuthenticationContext;
     public tokenCache: adal.MemoryCache;
     public tenantId: string;
-    public acquireUserCode: (resource: string, clientId: string, language: string) => Promise<adal.UserCodeInfo>;
+    public acquireUserCode: (
+        resource: string,
+        clientId: string,
+        language: string
+    ) => Promise<adal.UserCodeInfo>;
     public acquireTokenWithClientCredentials: (
         resource: string,
         clientId: string,
         sercret: string
     ) => Promise<adal.TokenResponse>;
-    public acquireTokenWithDeviceCode: (resource: string, clientId: string, userCodeInfo: adal.UserCodeInfo) => Promise<adal.TokenResponse>;
+    public acquireTokenWithDeviceCode: (
+        resource: string,
+        clientId: string,
+        userCodeInfo: adal.UserCodeInfo
+    ) => Promise<adal.TokenResponse>;
     public acquireTokenWithRefreshToken: (
         refreshToken: string,
         clientId: string,
@@ -25,12 +33,8 @@ export class Adal {
         this.tenantId = tenantId;
         const authority = `https://login.microsoftonline.com/${tenantId}/`;
         this.tokenCache = new adal.MemoryCache();
-        this.getCreds = promisify(
-            this.tokenCache.find.bind(this.tokenCache)
-        );
-        this.addCreds = promisify(
-            this.tokenCache.add.bind(this.tokenCache)
-        );
+        this.getCreds = promisify(this.tokenCache.find.bind(this.tokenCache));
+        this.addCreds = promisify(this.tokenCache.add.bind(this.tokenCache));
 
         this.ac = new adal.AuthenticationContext(
             authority,
