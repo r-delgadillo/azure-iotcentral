@@ -17,10 +17,7 @@ export async function sendRequest<T>(
         method: options.method,
         headers: {
             Accept: 'application/json',
-            Authorization: formatToken(
-                token.type,
-                token.accessToken
-            ),
+            Authorization: formatToken(token.type, token.accessToken),
         },
         body: options.body,
     });
