@@ -15,6 +15,15 @@ export async function create(
     return client.apps.createOrUpdate(resourceGroup, resourceName, app);
 }
 
+/** Creates a new Iot Central application */
+export async function remove(
+    resourceGroup: string,
+    resourceName: string
+): Promise<void> {
+    const client = await IoTCentral.ControlPlane.getClient();
+    await client.apps.deleteMethod(resourceGroup, resourceName);
+}
+
 /** Lists the available IoT Central applications in the
  * specified resource group.
  */

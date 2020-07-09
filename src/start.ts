@@ -2,7 +2,10 @@ import { Authentication } from './clients';
 import * as Scripts from './scripts/iotcentral';
 
 async function main() {
-    await Authentication.login();
+    // Authenticate to retrieve access tokens
+    await Authentication.login(Authentication.SignInTypes.ServicePrincipal);
+
+    // Execute script
     await Scripts.execute();
 }
 

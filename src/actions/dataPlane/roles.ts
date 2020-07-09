@@ -5,6 +5,7 @@ type Role = {
     displayName?: string;
 };
 
+/** Lists the available roles that a user can be assigned. */
 export async function list(): Promise<Role[]> {
     const result = await PublicApi.sendRequest<{ value: Role[] }>('/roles', {
         method: 'GET',
@@ -13,6 +14,7 @@ export async function list(): Promise<Role[]> {
     return result.body.value;
 }
 
+/** Gets a specific role information. */
 export async function get(roleId: string): Promise<Role> {
     const result = await PublicApi.sendRequest<Role>(`/roles/${roleId}`, {
         method: 'GET',

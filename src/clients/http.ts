@@ -21,8 +21,9 @@ export async function sendRequest<TResponseBody>(
                 ...requestOptions,
             },
             (err, res, body) => {
-                if (err) {
-                    return reject(err);
+                const error = err || body.error;
+                if (error) {
+                    return reject(error);
                 }
 
                 return resolve(res);

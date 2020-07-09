@@ -1,10 +1,13 @@
 import * as adal from 'adal-node';
 
 const { promisify } = require('util');
+
 export class Adal {
-    public ac: adal.AuthenticationContext;
+    public authContext: adal.AuthenticationContext;
     public tokenCache: adal.MemoryCache;
     public tenantId: string;
+
+    /** Adal wrapper function to remove function callbacks */
     public acquireUserCode: (
         resource: string,
         clientId: string,
@@ -25,31 +28,37 @@ export class Adal {
         clientId: string,
         resource: string
     ) => Promise<adal.TokenResponse>;
-
     public getCreds: (query: any) => Promise<adal.TokenResponse[]>;
     public addCreds: (token: adal.TokenResponse[]) => Promise<void>;
 
     constructor(tenantId: string) {
         this.tenantId = tenantId;
-        const authority = `https://login.microsoftonline.com/${tenantId}/`;
+        const loginAuthority = `https://login.microsoftonline.com/${tenantId}/`;
+
+        /** Token cache wrappers */
         this.tokenCache = new adal.MemoryCache();
         this.getCreds = promisify(this.tokenCache.find.bind(this.tokenCache));
         this.addCreds = promisify(this.tokenCache.add.bind(this.tokenCache));
 
-        this.ac = new adal.AuthenticationContext(
-            authority,
+        /** Authentication context wrappers */
+        this.authContext = new adal.AuthenticationContext(
+            loginAuthority,
             true,
             this.tokenCache
         );
-        this.acquireUserCode = promisify(this.ac.acquireUserCode.bind(this.ac));
+        this.acquireUserCode = promisify(
+            this.authContext.acquireUserCode.bind(this.authContext)
+        );
         this.acquireTokenWithClientCredentials = promisify(
-            this.ac.acquireTokenWithClientCredentials.bind(this.ac)
+            this.authContext.acquireTokenWithClientCredentials.bind(
+                this.authContext
+            )
         );
         this.acquireTokenWithDeviceCode = promisify(
-            this.ac.acquireTokenWithDeviceCode.bind(this.ac)
+            this.authContext.acquireTokenWithDeviceCode.bind(this.authContext)
         );
         this.acquireTokenWithRefreshToken = promisify(
-            this.ac.acquireTokenWithRefreshToken.bind(this.ac)
+            this.authContext.acquireTokenWithRefreshToken.bind(this.authContext)
         );
     }
 }

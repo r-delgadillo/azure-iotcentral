@@ -1,11 +1,13 @@
 import * as PublicApi from '../../clients/iotc/dataPlane';
 
-export interface Role {
-    roleId: string;
-    name?: string;
-}
+export type Principal = User | ServicePrincipal;
 
 export type UserType = 'EmailUser' | 'ServicePrincipalUser';
+
+export interface Role {
+    role: string;
+    name?: string;
+}
 
 export interface BaseUser {
     id: string;
@@ -24,14 +26,8 @@ export interface ServicePrincipal extends BaseUser {
     type: 'ServicePrincipalUser';
 }
 
-export interface AddUser {
-    id: string;
-    type: 'EmailUser';
-    email: string;
-    roles: string[];
-}
-
-export async function list(): Promise<User[]> {
+/** Lists the available users that can access the application. */
+export async function list(): Promise<Principal[]> {
     const result = await PublicApi.sendRequest<{ value: User[] }>('/users', {
         method: 'GET',
     });
@@ -39,6 +35,7 @@ export async function list(): Promise<User[]> {
     return result.body.value;
 }
 
+/** Get a specific user. */
 export async function get(userId: string): Promise<User> {
     const result = await PublicApi.sendRequest<User>(`/users/${userId}`, {
         method: 'GET',
@@ -47,7 +44,8 @@ export async function get(userId: string): Promise<User> {
     return result.body;
 }
 
-export async function addUser(user: AddUser) {
+/** Add a user by email or service principal */
+export async function addUser(user: Principal) {
     const result = await PublicApi.sendRequest<User>(`/users/${user.id}`, {
         method: 'PUT',
         body: user,
@@ -55,29 +53,24 @@ export async function addUser(user: AddUser) {
     return result.body;
 }
 
-export async function addUsersBatch(users: AddUser[]): Promise<User[]> {
-    const usersAdded: User[] = [];
+/** Batch add a user by email and service principal. */
+export async function addUsersBatch(users: Principal[]): Promise<Principal[]> {
+    const usersAdded: Principal[] = [];
     for (const user of users) {
-        const newUser = await PublicApi.sendRequest<User>(`/users/${user.id}`, {
-            method: 'PUT',
-            body: user,
-        });
+        const newUser = await PublicApi.sendRequest<Principal>(
+            `/users/${user.id}`,
+            {
+                method: 'PUT',
+                body: user,
+            }
+        );
         usersAdded.push(newUser.body);
     }
     return usersAdded;
 }
 
-export async function addServicePrincipal(sp: ServicePrincipal) {
-    const result = await PublicApi.sendRequest<User>(`/users/${sp.id}`, {
-        method: 'PUT',
-        body: sp,
-    });
-    return result.body;
-}
-
+/** Remove a user from the application. */
 export async function remove(id: string): Promise<void> {
-    console.log('--------------------');
-    console.log(id);
     await PublicApi.sendRequest<User>(`/users/${id}`, {
         method: 'DELETE',
     });

@@ -1,40 +1,37 @@
 import { Authentication } from '../';
-import * as Context from '../../core/context';
+import * as Constants from '../../core/constants';
 import * as HttpClient from '../http';
 
-let url = `https://${Context.subdomain}.${Context.envDomain}.com/api/preview`;
+let publicApiUrl: string;
+
+/** Execute http request to the applications public API. */
 export async function sendRequest<T>(
     path: string,
-    options: { method: string; body?: any },
-    subdomain?: string
+    options: { method: string; body?: any }
 ): Promise<HttpClient.RequestResponse<T>> {
     const token = await Authentication.getAccessToken(
         Authentication.Resource.iotCentral
     );
 
-    const result = (await HttpClient.sendRequest(`${url}${path}`, {
+    return HttpClient.sendRequest<T>(`${publicApiUrl}${path}`, {
         method: options.method,
         headers: {
             Accept: 'application/json',
-            Authorization: getAuthorizationHeader(
+            Authorization: formatToken(
                 token.type,
                 token.accessToken
             ),
         },
         body: options.body,
-    })) as any;
-
-    if (result && result.body && result.body.error) {
-        throw new Error(JSON.stringify(result.body['error']));
-    }
-
-    return result as any;
+    });
 }
 
+/** Execute to change the target app */
 export function setTargetApp(subdomain: string): void {
-    url = `https://${subdomain}.${Context.envDomain}.com/api/preview`;
+    publicApiUrl = `https://${subdomain}.${Constants.IotCentralConfig.domain}.com/api/preview`;
 }
 
-function getAuthorizationHeader(type: string, accessToken: string): string {
+/** Composes the token string for the Authentication header */
+function formatToken(type: string, accessToken: string): string {
     return `${type} ${accessToken}`;
 }
